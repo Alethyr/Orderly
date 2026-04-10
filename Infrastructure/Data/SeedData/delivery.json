@@ -1,0 +1,26 @@
+[
+  {
+    "ShortName": "ЭКСПРЕСС",
+    "Description": "Курьер привезёт прямо к двери на следующий день",
+    "DeliveryTime": "1-2 дня",
+    "Price": 350
+  },
+  {
+    "ShortName": "СТАНДАРТ",
+    "Description": "Быстро и надёжно — доставим за пару дней",
+    "DeliveryTime": "2-4 дня",
+    "Price": 199
+  },
+  {
+    "ShortName": "ЭКОНОМ",
+    "Description": "Не торопимся, но довезём",
+    "DeliveryTime": "5-7 дней",
+    "Price": 99
+  },
+  {
+    "ShortName": "БЕСПЛАТНО",
+    "Description": "Бесплатная доставка при заказе от 2000 ₽",
+    "DeliveryTime": "7-14 дней",
+    "Price": 0
+  }
+]
