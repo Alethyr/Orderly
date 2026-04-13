@@ -11,9 +11,21 @@ builder.Services.AddDbContext<StoreContext>(opt =>
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name:"AllowFrontend", configurePolicy =>
+    {
+        configurePolicy.WithOrigins("http://localhost:4200", "https://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
+
 app.UseMiddleware<ExceptionMiddleware>();
+app.UseCors("AllowFrontend");
 app.MapControllers();
 
 try
