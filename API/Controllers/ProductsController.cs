@@ -1,7 +1,9 @@
+using API.RequestHelpers;
 using Core.Entities;
 using Core.Intrefaces;
 using Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 
 namespace API.Controllers;
 
@@ -12,7 +14,7 @@ public class ProductsController(IGenericRepository<Product> repo) : ControllerBa
     [HttpGet("brands")]
     public async Task<ActionResult<IReadOnlyList<string>>> GetBrands()
     {
-        var spec = new BrandListSpec();
+        var spec = new BrandListSpec(); 
         return Ok(await repo.ListAsync(spec));
     }
 
@@ -20,14 +22,21 @@ public class ProductsController(IGenericRepository<Product> repo) : ControllerBa
     public async Task<ActionResult<IReadOnlyList<string>>> GetTypes()
     {
         var spec = new TypeListSpec();
-        return Ok(await repo.ListAsync(spec));
+        return Ok(await repo.ListAsync(spec)); 
     }
 
   [HttpGet]
-  public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts(string? brand, string? type, string? sort)
+  public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts(
+    [FromQuery]ProductSpecParams specParams)
     {
-        var spec = new ProductSpecification(brand,type,sort );
-        return Ok(await repo.ListAsync(spec));
+        var spec = new ProductSpecification(specParams);
+        var products = await repo.ListAsync(spec);
+        var count = await repo.CountAsync(spec);
+        var pagination = new Pagination<Product>(specParams.PageIndex,
+                                                 specParams.PageSize,
+                                                 count,
+                                                 products);
+        return Ok(pagination);
     }
    
    [HttpGet("{id:int}")]
