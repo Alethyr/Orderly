@@ -6,6 +6,7 @@ using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 using Microsoft.OpenApi;
+using API.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +46,7 @@ builder.Services.AddSingleton<ICartService, CartService>();
 builder.Services.AddAuthorization();
 builder.Services.AddIdentityApiEndpoints<AppUser>().AddEntityFrameworkStores<StoreContext>();
 builder.Services.AddScoped<IPaymentService,PaymentService>();
+builder.Services.AddSignalR();
 
 
 
@@ -52,9 +54,15 @@ var app = builder.Build();
 
 
 app.UseMiddleware<ExceptionMiddleware>();
+
 app.UseCors("AllowFrontend");
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
 app.MapGroup("api").MapIdentityApi<AppUser>();
+app.MapHub<NotificationHub>("hub/notifications");
 
 try
 {
