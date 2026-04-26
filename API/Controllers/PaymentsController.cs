@@ -81,7 +81,7 @@ IConfiguration config, IHubContext<NotificationHub> hubContext) : BaseApiControl
             
             var connectionid = NotificationHub.GetConnectionIdByEmail(order.BuyerEmail);
 
-            if (!string.IsNullOrEmpty(connectionid){
+            if (!string.IsNullOrEmpty(connectionid)){
                 await hubContext.Clients.Client(connectionid).
                     SendAsync("OrderCompleteNotifaction", order.ToDTO());
             }
