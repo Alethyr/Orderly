@@ -67,17 +67,18 @@ public class OrdersController(ICartService cartService, IUnitOfWork unit) : Base
     {
         var spec = new OrderSpecification(User.GetEmail());
         var orders = await unit.Repository<Order>().ListAsync(spec);
+        var ordersToReturn = orders.Select(o => o.ToDTO()).ToList();
         if(orders is null) return NotFound();
-        return Ok(orders);
+        return Ok(ordersToReturn);
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Order>> GetOrderById(int id)
+    public async Task<ActionResult<OrderDTO>> GetOrderById(int id)
     {
         var spec = new OrderSpecification(User.GetEmail(), id);
         var order = await unit.Repository<Order>().GetEntityWithSpec(spec);
         if(order is null) return NotFound();
-        return order;
+        return order.ToDTO();
     }
 
 }
