@@ -11,6 +11,12 @@ namespace API.Controllers;
 
 public class AccountController(SignInManager<AppUser> signInManager) : BaseApiController
 {
+    /// <summary>
+    /// Регистрация нового пользователя.
+    /// </summary>
+    /// <param name="registerDTO">Данные для регистрации.</param>
+    /// <response code="200">Пользователь успешно зарегистрирован.</response>
+    /// <response code="400">Ошибки валидации (например, email уже занят или слабый пароль).</response>
     [HttpPost("register")]
     public async Task<ActionResult> Register(RegisterDTO registerDTO)
     {
@@ -37,15 +43,31 @@ public class AccountController(SignInManager<AppUser> signInManager) : BaseApiCo
         return Ok();
     }
 
-    [HttpPost("logout")]
+    /// <summary>
+    /// Выход из текущей сессии.
+    /// </summary>
+    /// <response code="204">Выход выполнен успешно.</response>
     [Authorize]
+    [HttpPost("logout")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> Logout()
     {
         await signInManager.SignOutAsync();
         return NoContent();
     }
 
+    /// <summary>
+    /// Получение информации о текущем пользователе.
+    /// </summary>
+    /// <remarks>
+    /// Если пользователь не авторизован — возвращает 204 No Content.
+    /// Если авторизован — возвращает профиль с адресом и ролями.
+    /// </remarks>
+    /// <response code="200">Данные пользователя.</response>
+    /// <response code="204">Пользователь не авторизован.</response>
     [HttpGet("user-info")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> GetUserInfo()
     {
         if (User.Identity?.IsAuthenticated is false) return NoContent();
@@ -61,7 +83,12 @@ public class AccountController(SignInManager<AppUser> signInManager) : BaseApiCo
 
     }
 
+    /// <summary>
+    /// Проверка статуса аутентификации текущего запроса.
+    /// </summary>
+    /// <response code="200">Возвращает <c>isAuthenticated: true/false</c>.</response>
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult GetAuthState()
     {
         return Ok(new
@@ -70,8 +97,17 @@ public class AccountController(SignInManager<AppUser> signInManager) : BaseApiCo
         });
     }
 
+    /// <summary>
+    /// Создание или обновление адреса текущего пользователя.
+    /// </summary>
+    /// <param name="addressDTO">Данные адреса.</param>
+    /// <response code="200">Адрес успешно сохранён, возвращает обновлённый адрес.</response>
+    /// <response code="400">Ошибка при сохранении адреса.</response>
     [HttpPost("address")]
     [Authorize]
+    [ProducesResponseType(typeof(AddressDTO), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<Address>> CreateOrUpdateAddress(AddressDTO addressDTO)
     {
         var user = await signInManager.UserManager.GetUserByEmailWithAddress(User);

@@ -35,11 +35,11 @@ public class CartController(ICartService cartService) : BaseApiController
     /// <summary>
     /// Удаление корзины.
     /// </summary>
-    /// <response code="200">Корзина по id успешно удалена.</response>
+    /// <response code="204">Корзина по id успешно удалена.</response>
     /// <response code="404">Корзина не существует..</response>
     /// <param name="id">Идентификатор корзины</param>
     [HttpDelete]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteCart(string id)
     {

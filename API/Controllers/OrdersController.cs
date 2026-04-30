@@ -17,7 +17,7 @@ public class OrdersController(ICartService cartService, IUnitOfWork unit) : Base
     /// <summary>
     /// Создание заказа.
     /// </summary>
-    /// <response code="200">Заказ успешно создан.</response>4
+    /// <response code="200">Заказ успешно создан.</response>
     /// <response code="400">BadRequest. Подробности в ответе.</response>
     /// <param name="OrderDTO">Заказ</param>
     [HttpPost]
@@ -75,7 +75,7 @@ public class OrdersController(ICartService cartService, IUnitOfWork unit) : Base
     /// <summary>
     /// Получение списка всех заказов пользователя.
     /// </summary>
-    /// <response code="200">Список заказов.</response>4
+    /// <response code="200">Список заказов.</response>
     /// <response code="404">Заказы не найдены.</response>
     [HttpGet]
     [ProducesResponseType(typeof(Order), StatusCodes.Status200OK)]
@@ -92,9 +92,9 @@ public class OrdersController(ICartService cartService, IUnitOfWork unit) : Base
     /// <summary>
     /// Получение заказа по id.
     /// </summary>
-    /// <response code="200">Заказ по id успешно найден</response>4
+    /// <response code="200">Заказ по id успешно найден</response>
     /// <response code="404">Продукт с указанным id не найден.</response>
-    /// /// /// <param name="id">Идентификатор заказа</param>
+    /// <param name="id">Идентификатор заказа</param>
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(OrderDTO), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
+[ApiExplorerSettings(IgnoreApi = true)]
 public class BagController : BaseApiController
 {   
     /// <summary>

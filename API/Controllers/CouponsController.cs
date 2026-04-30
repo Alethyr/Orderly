@@ -10,7 +10,7 @@ public class CouponsController(ICouponService couponService) : BaseApiController
     /// Валидация купона.
     /// </summary>
     /// <response code="200">Купон валидный.</response>
-    /// <response code="404">Купон невалидный.</response>
+    /// <response code="400">Купон невалидный.</response>
     /// <param name="code">Name купона</param>
     [HttpGet("{code}")]
     [ProducesResponseType(typeof(AppCoupon), StatusCodes.Status200OK)]
