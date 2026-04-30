@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Mvc;
+
 namespace API.Extensions;
 
 public static class ApplicationServiceExtensions
@@ -6,7 +8,11 @@ public static class ApplicationServiceExtensions
         this IServiceCollection services, 
         IConfiguration config)
     {
-        services.AddControllers();
+        services.AddControllers(options =>
+        {
+            options.Filters
+                .Add(new ProducesAttribute("application/json"));
+        });
 
         services.AddCors(options =>
         {

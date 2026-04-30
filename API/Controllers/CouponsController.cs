@@ -6,12 +6,20 @@ namespace API.Controllers;
 
 public class CouponsController(ICouponService couponService) : BaseApiController
 {
-   [HttpGet("{code}")]
-   public async Task<ActionResult<AppCoupon>> ValidateCoupon(string code)
+    /// <summary>
+    /// Валидация купона.
+    /// </summary>
+    /// <response code="200">Купон валидный.</response>
+    /// <response code="404">Купон невалидный.</response>
+    /// <param name="code">Name купона</param>
+    [HttpGet("{code}")]
+    [ProducesResponseType(typeof(AppCoupon), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<AppCoupon>> ValidateCoupon(string code)
     {
         var coupon = await couponService.GetCouponFromPromoCodeAsync(code);
-        if(coupon is null) return BadRequest("Invalid voucher code");
-        return coupon;
+        if(coupon is null) return BadRequest("Invalid coupon code");
+        return Ok(coupon);
     }
     
 }

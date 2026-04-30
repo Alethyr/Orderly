@@ -10,6 +10,17 @@ public class GenericRepository<T>(StoreContext context) : IGenericRepository<T> 
     {
         context.Set<T>().Add(entity);
     }
+    
+    public void Remove(T entity)
+    {
+        context.Set<T>().Remove(entity);
+    }
+
+    public void Update(T entity)
+    {
+        context.Set<T>().Attach(entity);
+        context.Entry(entity).State = EntityState.Modified;
+    }
 
     public async Task<int> CountAsync(ISpecification<T> spec)
     {
@@ -18,9 +29,9 @@ public class GenericRepository<T>(StoreContext context) : IGenericRepository<T> 
         return await query.CountAsync();
     }
 
-    public bool Exists(int id)
+    public async Task<bool> ExistsAsync(int id)
     {
-        return context.Set<T>().Any(x => x.Id == id);
+        return await context.Set<T>().AnyAsync(x => x.Id == id);
     }
 
     public async Task<T?> GetByIdAsync(int id)
@@ -51,18 +62,6 @@ public class GenericRepository<T>(StoreContext context) : IGenericRepository<T> 
     public async Task<IReadOnlyList<TResult>> ListAsync<TResult>(ISpecification<T, TResult> spec)
     {
         return await ApplySpecification(spec).ToListAsync();
-    }
-
-    public void Remove(T entity)
-    {
-        context.Set<T>().Remove(entity);
-    }
-
-
-    public void Update(T entity)
-    {
-        context.Set<T>().Attach(entity);
-        context.Entry(entity).State = EntityState.Modified;
     }
 
     private IQueryable<T> ApplySpecification(ISpecification<T> spec)

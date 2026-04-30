@@ -2,10 +2,21 @@ using API.Middleware;
 using Core.Entities;
 using API.SignalR;
 using API.Extensions;
+using Scalar.AspNetCore;
+using API.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddEndpointsApiExplorer();
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddOpenApi(options =>
+    {
+        options.AddOperationTransformer<CommonResponsesTransformer>();
+    });
+}
+
 
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddInfrastructureServices(builder.Configuration);
@@ -21,8 +32,17 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapGroup("api").MapIdentityApi<AppUser>();
+app.MapGroup("api")
+    .MapIdentityApi<AppUser>()
+    .ExcludeFromDescription();
+    
 app.MapHub<NotificationHub>("hub/notifications");
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+}
 
 await app.ApplyMigrationsAndSeedAsync();
 

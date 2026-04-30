@@ -13,8 +13,17 @@ namespace API.Controllers;
 [Authorize]
 public class OrdersController(ICartService cartService, IUnitOfWork unit) : BaseApiController
 {
-  [HttpPost]
-  public async Task<ActionResult<Order>> CreateOrder(CreateOrderDTO OrderDTO)
+    
+    /// <summary>
+    /// Создание заказа.
+    /// </summary>
+    /// <response code="200">Заказ успешно создан.</response>4
+    /// <response code="400">BadRequest. Подробности в ответе.</response>
+    /// <param name="OrderDTO">Заказ</param>
+    [HttpPost]
+    [ProducesResponseType(typeof(Order), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<Order>> CreateOrder(CreateOrderDTO OrderDTO)
     {
         var email = User.GetEmail();
         var cart = await cartService.GetCartAsync(OrderDTO.CartId);
@@ -33,7 +42,7 @@ public class OrdersController(ICartService cartService, IUnitOfWork unit) : Base
                 ProductName = productItem.Name,
                 PictureUrl = productItem.PictureUrl
             };
-            
+
             var orderItem = new OrderItem
             {
                 ItemOrdered = itemOrder,
@@ -59,13 +68,19 @@ public class OrdersController(ICartService cartService, IUnitOfWork unit) : Base
         };
 
         unit.Repository<Order>().Add(order);
-        if(await unit.Complete()) return order;
+        if(await unit.Complete()) return Ok(order);
         return BadRequest("Problem with creating order");
     }
 
-   
-   [HttpGet]
-   public async Task<ActionResult<IReadOnlyList<Order>>> GetOrdersForUser()
+    /// <summary>
+    /// Получение списка всех заказов пользователя.
+    /// </summary>
+    /// <response code="200">Список заказов.</response>4
+    /// <response code="404">Заказы не найдены.</response>
+    [HttpGet]
+    [ProducesResponseType(typeof(Order), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<IReadOnlyList<Order>>> GetOrdersForUser()
     {
         var spec = new OrderSpecification(User.GetEmail());
         var orders = await unit.Repository<Order>().ListAsync(spec);
@@ -74,13 +89,21 @@ public class OrdersController(ICartService cartService, IUnitOfWork unit) : Base
         return Ok(ordersToReturn);
     }
 
+    /// <summary>
+    /// Получение заказа по id.
+    /// </summary>
+    /// <response code="200">Заказ по id успешно найден</response>4
+    /// <response code="404">Продукт с указанным id не найден.</response>
+    /// /// /// <param name="id">Идентификатор заказа</param>
     [HttpGet("{id:int}")]
+    [ProducesResponseType(typeof(OrderDTO), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<OrderDTO>> GetOrderById(int id)
     {
         var spec = new OrderSpecification(User.GetEmail(), id);
         var order = await unit.Repository<Order>().GetEntityWithSpec(spec);
         if(order is null) return NotFound();
-        return order.ToDTO();
+        return Ok(order.ToDTO());
     }
 
 }
