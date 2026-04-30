@@ -29,8 +29,8 @@ public class PaymentsController(IPaymentService paymentService,
     /// <response code="200">PaymentIntent успешно создан/обновлён.</response>
     /// <response code="400">Проблема с корзиной (cart).</response>
     /// <param name="cartId">Идентификатор корзины</param>
-    [Authorize]
     [HttpPost("{cartId}")]
+    [Authorize]
     [ProducesResponseType(typeof(ShoppingCart), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<ShoppingCart>> CreateOrUpdatePaymentIntent(string cartId)

@@ -66,8 +66,8 @@ public class BagController : BaseApiController
     /// Проверка авторизации
     /// </summary>
     /// <response code="200">AuthroizeCheck</response>
-    [Authorize]
     [HttpGet("secret")]
+    [Authorize]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
     public IActionResult GetSecret()
     {
@@ -81,8 +81,8 @@ public class BagController : BaseApiController
     /// Проверка роли Админа
     /// </summary>
     /// <response code="200">AdminCheck</response>
-    [Authorize(Roles = "Admin")]
     [HttpGet("admin-secret")]
+    [Authorize(Roles = "Admin")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public IActionResult GetAdminSecret()
     {

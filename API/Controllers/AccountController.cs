@@ -12,7 +12,7 @@ namespace API.Controllers;
 public class AccountController(SignInManager<AppUser> signInManager) : BaseApiController
 {
     [HttpPost("register")]
-   public async Task<ActionResult> Register(RegisterDTO registerDTO)
+    public async Task<ActionResult> Register(RegisterDTO registerDTO)
     {
         var user = new AppUser()
         {
@@ -37,8 +37,8 @@ public class AccountController(SignInManager<AppUser> signInManager) : BaseApiCo
         return Ok();
     }
 
-    [Authorize]
     [HttpPost("logout")]
+    [Authorize]
     public async Task<ActionResult> Logout()
     {
         await signInManager.SignOutAsync();
@@ -66,12 +66,12 @@ public class AccountController(SignInManager<AppUser> signInManager) : BaseApiCo
     {
         return Ok(new
         {
-            IsAuthenticated = User.Identity?.IsAuthenticated ?? false,  
+            IsAuthenticated = User.Identity?.IsAuthenticated ?? false,
         });
     }
 
-    [Authorize]
     [HttpPost("address")]
+    [Authorize]
     public async Task<ActionResult<Address>> CreateOrUpdateAddress(AddressDTO addressDTO)
     {
         var user = await signInManager.UserManager.GetUserByEmailWithAddress(User);
