@@ -16,8 +16,6 @@ public class AdminController(IUnitOfWork unit, IPaymentService paymentService) :
     /// Получение списка всех заказов с поддержкой фильтрации и пагинации.
     /// </summary>
     /// <response code="200">Список заказов успешно получен.</response>
-    /// <response code="401">Пользователь не авторизован.</response>
-    /// <response code="403">Недостаточно прав для выполнения операции.</response>
     /// <param name="specParams">Параметры спецификации (фильтрация, сортировка, пагинация)</param>
     [HttpGet("orders")]
     [ProducesResponseType(typeof(Pagination<OrderDTO>), StatusCodes.Status200OK)]
@@ -31,8 +29,6 @@ public class AdminController(IUnitOfWork unit, IPaymentService paymentService) :
     /// Получение заказа по id.
     /// </summary>
     /// <response code="200">Заказ успешно получен.</response>
-    /// <response code="401">Пользователь не авторизован.</response>
-    /// <response code="403">Недостаточно прав для выполнения операции.</response>
     /// <response code="404">Заказ не найден.</response>
     /// <param name="id">Идентификатор заказа</param>
     [HttpGet("orders/{id:int}")]
@@ -51,8 +47,6 @@ public class AdminController(IUnitOfWork unit, IPaymentService paymentService) :
     /// </summary>
     /// <response code="200">Возврат успешен.</response>
     /// <response code="400">Проблема с возвратом.</response>
-    /// <response code="401">Пользователь не авторизован.</response>
-    /// <response code="403">Недостаточно прав для выполнения операции.</response>
     /// <response code="404">Заказ не найден.</response>
     /// <response code="409">Заказ не был оплачен.</response>
     /// <param name="id">Идентификатор заказа</param>

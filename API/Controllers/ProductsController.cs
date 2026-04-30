@@ -81,8 +81,6 @@ public class ProductsController(IUnitOfWork unit) : BaseApiController
     /// </summary>
     /// <response code="201">Продукт успешно создан.</response>
     /// <response code="400">Ошибка при создании продукта.</response>
-    /// <response code="401">Пользователь не авторизован.</response>
-    /// <response code="403">Недостаточно прав. Требуется роль Admin.</response>
     /// <param name="product">Продукт который необходимо создать</param>
     [HttpPost]
     [Authorize(Roles = "Admin")]
@@ -104,8 +102,6 @@ public class ProductsController(IUnitOfWork unit) : BaseApiController
     /// </summary>
     /// <response code="204">Продукт успешно обновлён.</response>
     /// <response code="400">Ошибка при обновлении продукта.</response>
-    /// <response code="401">Пользователь не авторизован.</response>
-    /// <response code="403">Недостаточно прав. Требуется роль Admin.</response>
     /// <response code="404">Продукт с указанным id не найден.</response>
     /// <response code="409">Id в URL не совпадает с Id в теле запроса.</response>
     /// <param name="id">Идентификатор продукта</param>
@@ -137,8 +133,6 @@ public class ProductsController(IUnitOfWork unit) : BaseApiController
     /// </summary>
     /// <response code="204">Продукт успешно удалён.</response>
     /// <response code="400">Ошибка при удалении продукта.</response>
-    /// <response code="401">Пользователь не авторизован.</response>
-    /// <response code="403">Недостаточно прав. Требуется роль Admin.</response>
     /// <response code="404">Продукт с указанным id не найден.</response>
     /// <param name="id">Идентификатор продукта</param>
     [HttpDelete("{id:int}")]
